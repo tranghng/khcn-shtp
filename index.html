@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản tin Khoa học - Khu Công nghệ cao TP.HCM (SHTP)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --success-color: #2ecc71;
+            --text-color: #555;
+            --heading-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --white-color: #ffffff;
+            --border-color: #dee2e6;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        body.modal-open { overflow: hidden; }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .site-header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 0.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            backdrop-filter: blur(8px);
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+        .site-logo img {
+            height: 45px;
+        }
+        .site-logo span {
+            font-size: 1.1rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .main-nav {
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .main-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .main-nav ul {
+            padding: 0; margin: 0; list-style: none;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+        .main-nav ul li {
+            white-space: nowrap;
+        }
+        .main-nav a {
+            display: block;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .main-nav a:hover, .main-nav a.active {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+        }
+        main > section {
+            display: none;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        main > section.active {
+            display: block;
+        }
+        main > section:nth-child(even) {
+            background-color: var(--white-color);
+        }
+        .centered-title {
+             text-align: center; font-size: 2.5rem; color: var(--heading-color); margin-bottom: 3rem; position: relative;
+        }
+        .centered-title::after {
+            content: ''; display: block; width: 80px; height: 4px; background: var(--secondary-color);
+            margin: 10px auto 0 auto; border-radius: 2px;
+        }
+        .loader { text-align: center; padding: 3rem; font-size: 1.2rem; color: #777; }
+        
+        /* Trang chủ "Về SHTP" */
+        .homepage-banner {
+            width: 100%;
+            height: 450px;
+            background-image: url('https://cdn.giaoducthoidai.vn/images/3756cddb3a20ea36816643b138886f25a7bbaf496641fb64105e0a4886ea916ca8904041fc31274acb4faf5c0a71469e/shtp1.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+        .homepage-banner h1 {
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+        }
+        .core-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .value-card {
+            background: var(--white-color);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0) 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.4s;
+            opacity: 0;
+            z-index: 0;
+        }
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(44, 62, 80, 0.15);
+        }
+        .value-card:hover::before {
+            width: 300px;
+            height: 300px;
+            opacity: 1;
+        }
+        .value-card > * {
+            position: relative;
+            z-index: 1;
+        }
+        .value-card-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 1rem;
+        }
+        .value-card h3 { 
+            color: var(--secondary-color); 
+            margin-top: 0; 
+        }
+        .stats-section, .affiliated-units-section, .contact-section {
+            margin-top: 4rem;
+            padding: 3rem 0;
+        }
+        .affiliated-units-section, .contact-section {
+             background-color: var(--white-color);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+        }
+        .stats-card {
+            background: #fff;
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--secondary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #c0392b;
+            line-height: 1.1;
+        }
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-top: 0.5rem;
+        }
+        .unit-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .unit-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            text-align: center;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .unit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        }
+        .unit-card-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .unit-card-content {
+            flex-grow: 1;
+        }
+        .unit-card h3 {
+            margin-top: 0;
+            color: var(--heading-color);
+        }
+        .unit-card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .unit-card-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.6rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .unit-card-btn:hover {
+            background-color: #2980b9;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            align-items: center;
+        }
+        .contact-info p {
+            margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+         .contact-info p svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: var(--secondary-color);
+        }
+        .map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Section chung */
+        .hero-section { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white-color); padding: 5rem 0; text-align: center; }
+        .hero-section h1 { font-size: 3rem; margin-top: 0; }
+        .main-content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2.5rem; margin-top: 3rem; }
+        .event-details, .registration-sidebar { background: var(--white-color); padding: 2rem; border-radius: 12px; box-shadow: 0 5px 15px var(--shadow-color); }
+        .section-title { font-size: 1.8rem; color: var(--heading-color); margin-top: 0; margin-bottom: 1.5rem; border-bottom: 3px solid var(--secondary-color); display: inline-block; padding-bottom: 0.5rem; }
+        
+        /* Trang dữ liệu */
+        .data-page-container { padding: 3rem 0; }
+        .data-sub-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); }
+        .sub-nav-btn { padding: 0.8rem 1.5rem; border: none; background: none; cursor: pointer; font-size: 1.1rem; font-weight: 500; color: var(--text-color); border-bottom: 3px solid transparent; transition: color 0.3s, border-color 0.3s; }
+        .sub-nav-btn:hover { color: var(--heading-color); }
+        .sub-nav-btn.active { color: var(--secondary-color); border-bottom-color: var(--secondary-color); }
+        .data-content-pane { display: none; }
+        .data-content-pane.active { display: block; }
+        .chart-container, .table-container { background: var(--white-color); padding: 2rem; border-radius: 12px; box-shadow: 0 5px 15px var(--shadow-color); min-height: 400px; }
+        .filter-container { margin-bottom: 1.5rem; }
+        .table-filter-input { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        .data-table-wrapper { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .data-table th { background-color: #f8f9fa; }
+        
+        /* Trang tin tức */
+        .news-section { padding: 2rem 0; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .card { background: var(--white-color); border-radius: 12px; box-shadow: 0 5px 15px var(--shadow-color); overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
+        .card:hover { transform: translateY(-10px); }
+        .card-image { width: 100%; height: 220px; object-fit: cover; }
+        .card-content { padding: 1.5rem; }
+        .card-date {
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .card-content h3 {
+            margin-top: 0;
+        }
+        
+        /* Modal */
+        .article-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
+        .article-modal-overlay.show { display: flex; opacity: 1; }
+        .article-modal { background: var(--white-color); border-radius: 12px; width: 90%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column; }
+        .article-modal-header { padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .article-modal-close-btn { background: none; border: none; font-size: 2rem; cursor: pointer; }
+        .article-modal-body { padding: 2rem; overflow-y: auto; }
+
+        /* Trang hội thảo */
+        .hero-section .event-meta {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            font-weight: 500;
+            margin-top: 2rem;
+        }
+        .event-status {
+            margin: 1.5rem auto 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .event-status.happened {
+            background-color: #7f8c8d;
+            color: #ecf0f1;
+        }
+        .event-status svg {
+            width: 1.2em;
+            height: 1.2em;
+        }
+        .speaker-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.5rem; text-align: center; }
+        .speaker-card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--border-color); margin-bottom: 0.5rem; }
+        .speaker-info h4 { margin: 0.5rem 0 0.2rem 0; font-size: 1rem; color: var(--heading-color); }
+        .speaker-info p { margin: 0; font-size: 0.85rem; color: var(--text-color); }
+        .agenda-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        .agenda-table th, .agenda-table td { border-bottom: 1px solid var(--border-color); padding: 15px; text-align: left; }
+        .agenda-table th { font-weight: 700; color: var(--heading-color); background-color: #f8f9fa; }
+        .video-section { margin-top: 3rem; }
+        .media-container { position: relative; overflow: hidden; padding-top: 56.25%; border-radius: 12px; background-color: #000; }
+        .media-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input { width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; }
+        .submit-btn { width: 100%; background: var(--accent-color); color: var(--white-color); border: none; padding: 1rem; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        .document-section { text-align: center; margin-top: 2.5rem; }
+        .document-section img { max-width: 180px; margin: 1rem auto; }
+        .document-section a { color: var(--secondary-color); text-decoration: none; font-weight: 500; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .gallery-grid img { width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px var(--shadow-color); transition: transform 0.3s ease; cursor: pointer; }
+        .gallery-grid img:hover { transform: scale(1.05); }
+        .logo-carousel { overflow: hidden; position: relative; width: 100%; padding: 2rem 0; mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); }
+        .logo-slide { display: flex; width: max-content; animation: scroll 40s linear infinite; }
+        .logo-slide img {
+            height: 60px;
+            margin: 0 40px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .logo-carousel:hover .logo-slide {
+             animation-play-state: paused;
+        }
+        .logo-slide img:hover {
+            transform: scale(1.1);
+        }
+        .logo-carousel.grayscale .logo-slide img {
+             filter: grayscale(100%); 
+        }
+        .logo-carousel.grayscale .logo-slide img:hover {
+             filter: grayscale(0%);
+        }
+        @keyframes scroll { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Footer */
+        .site-footer { text-align: center; padding: 3rem 1rem; background: var(--primary-color); color: var(--white-color); margin-top: 4rem; }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .header-container { flex-wrap: wrap; justify-content: center; gap: 10px; }
+        }
+        @media (max-width: 768px) { .header-container { flex-direction: column; gap: 1rem; } .homepage-banner h1 { font-size: 2.5rem; } .contact-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container container">
+            <a href="#trang-chu" class="site-logo">
+                <img src="https://suneducation.com.vn/wp-content/uploads/2024/01/logo-shtp.png" alt="SHTP Logo">
+                <span>BẢN TIN KHOA HỌC SHTP</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#trang-chu" class="active">Về SHTP</a></li>
+                    <li><a href="#hoi-thao">Hội thảo khoa học</a></li>
+                    <li><a href="#hoat-dong">Tin hoạt động</a></li>
+                    <li><a href="#khoa-hoc-cong-nghe">Chính sách và Công nghệ</a></li>
+                    <li><a href="#du-lieu">Dữ liệu KH&CN, ĐMST</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Trang chủ: Giới thiệu SHTP -->
+        <section id="trang-chu" class="active">
+            <div class="container">
+                <div class="homepage-banner">
+                </div>
+                <h2 class="centered-title">Chào mừng đến với SHTP</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto;">Khu Công nghệ cao Thành phố Hồ Chí Minh (SHTP) được thành lập năm 2002 với sứ mệnh trở thành một đầu tàu kinh tế công nghệ cao, một trung tâm khoa học - công nghệ và đổi mới sáng tạo của thành phố và cả nước. SHTP tập trung thu hút đầu tư vào các lĩnh vực công nghệ cao, ươm tạo doanh nghiệp công nghệ, phát triển nguồn nhân lực chất lượng cao và thúc đẩy nghiên cứu khoa học, góp phần quan trọng vào sự phát triển kinh tế - xã hội bền vững.</p>
+                <div class="core-values">
+                    <div class="value-card">
+                        <img class="value-card-icon" src="https://cdn-icons-png.freepik.com/512/9329/9329103.png" alt="Đổi mới Sáng tạo">
+                        <h3>Đổi mới Sáng tạo</h3>
+                        <p>Luôn tiên phong trong nghiên cứu, phát triển và ứng dụng các công nghệ tiên tiến, tạo ra các sản phẩm và dịch vụ có giá trị gia tăng cao.</p>
+                    </div>
+                    <div class="value-card">
+                         <img class="value-card-icon" src="https://cdn-icons-png.freepik.com/512/7871/7871022.png" alt="Hợp tác Phát triển">
+                        <h3>Hợp tác Phát triển</h3>
+                        <p>Xây dựng môi trường liên kết hiệu quả giữa viện-trường-doanh nghiệp và các đối tác quốc tế để cùng nhau phát triển.</p>
+                    </div>
+                    <div class="value-card">
+                        <img class="value-card-icon" src="https://cdn-icons-png.flaticon.com/512/18242/18242150.png" alt="Phát triển Bền vững">
+                        <h3>Phát triển Bền vững</h3>
+                        <p>Hướng tới mô hình khu công nghệ xanh, thông minh, thân thiện với môi trường, hài hòa giữa phát triển kinh tế và bảo vệ hệ sinh thái.</p>
+                    </div>
+                </div>
+                <div class="stats-section">
+                    <h2 class="centered-title">Những con số ấn tượng</h2>
+                    <div class="stats-grid">
+                        <div class="stats-card">
+                            <div class="stat-number">162</div>
+                            <div class="stat-label">Dự án đầu tư CNC</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stat-number">360</div>
+                            <div class="stat-label">Nghiên cứu khoa học</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stat-number">85</div>
+                            <div class="stat-label">Sở hữu trí tuệ</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stat-number">137</div>
+                            <div class="stat-label">Dự án ươm tạo</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stat-number">2000</div>
+                            <div class="stat-label">Học viên/năm</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stat-number">100+</div>
+                            <div class="stat-label">Đối tác quốc tế</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="affiliated-units-section">
+                    <h2 class="centered-title">Đơn vị Khoa học Công nghệ Trực thuộc</h2>
+                    <div class="unit-card-grid">
+                        <div class="unit-card">
+                            <img src="http://14.225.241.239:33005//shtplabs/upload/files/1712826302050.png" alt="Trung tâm Nghiên cứu triển khai" class="unit-card-img">
+                            <div class="unit-card-content">
+                                <h3>Trung tâm Nghiên cứu & Triển khai</h3>
+                                <p>Nghiên cứu, phát triển và ứng dụng các công nghệ cao, chuyển giao công nghệ vào sản xuất và đời sống.</p>
+                            </div>
+                            <a href="http://shtplabs.org/gallery" class="unit-card-btn">Xem thêm</a>
+                        </div>
+                        <div class="unit-card">
+                            <img src="https://image.sggp.org.vn/w1000/Uploaded/2025/duaeymdrei/2024_03_21/u3b-7642.jpg.webp" alt="Trung tâm Công nghệ sinh học" class="unit-card-img">
+                             <div class="unit-card-content">
+                                <h3>Trung tâm Công nghệ Sinh học</h3>
+                                <p>Tập trung nghiên cứu và phát triển các ứng dụng công nghệ sinh học trong nông nghiệp, y tế và môi trường.</p>
+                            </div>
+                            <a href="https://www.hcmbiotech.com.vn/" class="unit-card-btn">Xem thêm</a>
+                        </div>
+                        <div class="unit-card">
+                            <img src="https://images.squarespace-cdn.com/content/v1/5930dc9237c5817c00b10842/1623919816729-400HC34D686ML4JTRU5Z/N4003_vuon-uom-dn-cnc-00cs.jpg" alt="Vườn ươm Doanh nghiệp" class="unit-card-img">
+                             <div class="unit-card-content">
+                                <h3>Vườn ươm Doanh nghiệp CNC</h3>
+                                <p>Hỗ trợ và nuôi dưỡng các doanh nghiệp khởi nghiệp trong lĩnh vực công nghệ cao, tạo bệ phóng vững chắc.</p>
+                            </div>
+                            <a href="https://shtpic.org/vi/" class="unit-card-btn">Xem thêm</a>
+                        </div>
+                        <div class="unit-card">
+                            <img src="http://www.shtp-training.edu.vn/img_data/images/%C4%90%C3%A0o%20t%E1%BA%A1o/K%E1%BB%B9%20thu%E1%BA%ADt/Denoised-14-denoise.jpg" alt="Trung tâm Đào tạo" class="unit-card-img">
+                             <div class="unit-card-content">
+                                <h3>Trung tâm Đào tạo</h3>
+                                <p>Cung cấp các chương trình đào tạo và phát triển nguồn nhân lực chất lượng cao cho ngành công nghệ.</p>
+                            </div>
+                            <a href="http://www.shtp-training.edu.vn/$0" class="unit-card-btn">Xem thêm</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-section">
+                     <h2 class="centered-title">Liên hệ</h2>
+                     <div class="contact-grid">
+                         <div class="contact-info">
+                            <h3>Ban Quản lý Khu công nghệ cao TP.HCM</h3>
+                            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Đường D1, Khu công nghệ cao, Phường Tân Phú, TP. Thủ Đức, TP. Hồ Chí Minh</span></p>
+                            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>ĐT: 028.3.7360293 - Fax: 028.3.7360292</span></p>
+                             <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>Email: qlkh.shtp@tphcm.gov.vn</span></p>
+                         </div>
+                         <div class="map-container">
+                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.484393282424!2d106.7863140748058!3d10.850644389302528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752763948488af%3A0x651989585b14199b!2sV%C6%B0%E1%BB%9Dn%20%C6%B0%C6%A1m%20Doanh%20nghi%E1%BB%87p%20C%C3%B4ng%20ngh%E1%BB%87%20cao!5e0!3m2!1svi!2s" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                         </div>
+                     </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Mục Hội thảo -->
+        <section id="hoi-thao">
+            <div id="hoi-thao-content">
+                 <div class="loader">Đang tải nội dung...</div>
+            </div>
+        </section>
+
+        <!-- Mục Tin Hoạt Động -->
+        <section id="hoat-dong">
+            <div class="container">
+                <div class="news-section">
+                    <h2 class="centered-title">Tin Hoạt Động</h2>
+                    <div id="hoat-dong-grid" class="card-grid">
+                        <div class="loader">Đang tải tin tức...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Mục Chính sách và Công nghệ -->
+        <section id="khoa-hoc-cong-nghe">
+            <div class="container">
+                <div class="news-section">
+                    <h2 class="centered-title">Tìm hiểu Chính sách và Công nghệ</h2>
+                    <div id="kcn-grid" class="card-grid">
+                        <div class="loader">Đang tải bài viết...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Mục Dữ liệu -->
+        <section id="du-lieu">
+             <div class="container data-page-container">
+                 <h2 class="centered-title">Dữ liệu Khoa học & Công nghệ, Đổi mới sáng tạo</h2>
+                 <div class="data-sub-nav">
+                     <button class="sub-nav-btn active" data-target="data-du-an-cnc">Dự án CNC</button>
+                     <button class="sub-nav-btn" data-target="data-chi-rd">Chi R&D</button>
+                     <button class="sub-nav-btn" data-target="data-nhan-luc">Nhân lực KH&CN</button>
+                     <button class="sub-nav-btn" data-target="data-de-tai">Đề tài KH&CN</button>
+                     <button class="sub-nav-btn" data-target="data-dao-tao">Đào tạo CNC</button>
+                     <button class="sub-nav-btn" data-target="data-khoi-nghiep">Khởi nghiệp ĐMST</button>
+                 </div>
+                 
+                 <div id="data-du-an-cnc" class="data-content-pane active"><div class="chart-container"><div class="loader">Đang tải dữ liệu...</div><canvas id="duAnChart"></canvas></div></div>
+                 <div id="data-chi-rd" class="data-content-pane"><div class="chart-container"><div class="loader">Đang tải dữ liệu...</div><canvas id="chiRdChart"></canvas></div></div>
+                 <div id="data-nhan-luc" class="data-content-pane"><div class="chart-container"><div class="loader">Đang tải dữ liệu...</div><canvas id="nhanLucChart"></canvas></div></div>
+                 <div id="data-de-tai" class="data-content-pane"><div class="table-container" id="deTaiTableContainer"><div class="loader">Đang tải dữ liệu...</div></div></div>
+                 <div id="data-dao-tao" class="data-content-pane"><div class="table-container" id="daoTaoTableContainer"><div class="loader">Đang tải dữ liệu...</div></div></div>
+                 <div id="data-khoi-nghiep" class="data-content-pane"><div class="table-container" id="khoiNghiepTableContainer"><div class="loader">Đang tải dữ liệu...</div></div></div>
+             </div>
+             <div id="partners-section"></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2025 Ban Quản lý Khu CNC TP.HCM. Thiết kế và phát triển với sự hỗ trợ của AI.</p>
+        </div>
+    </footer>
+    
+    <!-- Article Modal -->
+    <div id="article-modal-overlay" class="article-modal-overlay">
+        <div class="article-modal">
+            <div class="article-modal-header"><h2 id="article-modal-title"></h2><button id="article-modal-close-btn" class="article-modal-close-btn">&times;</button></div>
+            <div id="article-modal-body" class="article-modal-body"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- CONFIGURATION ---
+            const MASTER_SHEET_ID = '18ftqIwxQ65KTGTvncKASsNlQvQNEE8VtL7jfBgnZ50M';
+            
+            const CONFIG = {
+                'du-an-cnc': { sheetName: 'Dự án CNC', type: 'chart', canvasId: 'duAnChart' },
+                'chi-rd': { sheetName: 'Chi R&D', type: 'chart', canvasId: 'chiRdChart' },
+                'nhan-luc': { sheetName: 'Nhân lực KH&CN', type: 'chart', canvasId: 'nhanLucChart' },
+                'de-tai': { sheetName: 'Đề tài KH&CN', type: 'table', containerId: 'deTaiTableContainer' },
+                'dao-tao': { sheetName: 'Đào tạo CNC', type: 'table', containerId: 'daoTaoTableContainer' },
+                'khoi-nghiep': { sheetName: 'Khởi nghiệp ĐMST', type: 'table', containerId: 'khoiNghiepTableContainer' },
+                'hoat-dong': { sheetName: 'TinHoatDong', type: 'card', containerId: 'hoat-dong-grid' },
+                'khoa-hoc-cong-nghe': { sheetName: 'TimHieuCongNghe', type: 'card', containerId: 'kcn-grid' },
+                'hoi-thao': { type: 'conference' } 
+            };
+
+            // --- STATE MANAGEMENT ---
+            let chartInstances = {}; 
+            let fullContentData = {};
+            const loadedData = new Set();
+
+            // --- CORE ASYNC FUNCTIONS ---
+            async function fetchDataFromSheet(sheetName) {
+                if (!MASTER_SHEET_ID || MASTER_SHEET_ID.includes('DÁN_ID')) {
+                    throw new Error("Chưa cung cấp ID Google Sheet.");
+                }
+                const url = `https://docs.google.com/spreadsheets/d/${MASTER_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`Lỗi mạng khi tải sheet: ${sheetName}`);
+                let text = await response.text();
+                const match = text.match(/google\.visualization\.Query\.setResponse\((.*)\)/s);
+                if (!match || !match[1]) throw new Error(`Phản hồi không hợp lệ cho sheet: ${sheetName}.`);
+                const data = JSON.parse(match[1]);
+                if (data.status === 'error') throw new Error(`Lỗi từ Google API cho Sheet "${sheetName}": ${data.errors[0].detailed_message}`);
+                return data.table;
+            }
+
+            function parseSheetData(table) {
+                if (!table || !table.rows || table.cols.length === 0) return [];
+                const headers = table.cols.map(col => (col.label || '').toLowerCase().replace(/[^a-z0-9]/g, ''));
+                return table.rows.map(row => {
+                    const item = {};
+                    if(row.c) headers.forEach((header, index) => {
+                        if (header && row.c[index]) item[header] = row.c[index]?.f ?? row.c[index]?.v ?? '';
+                    });
+                    return item;
+                });
+            }
+
+            // --- DATA LOADING ORCHESTRATION ---
+            function loadContentForPage(pageId) {
+                const mainConfig = CONFIG[pageId];
+                if (mainConfig) {
+                    if (loadedData.has(pageId)) return;
+                    loadedData.add(pageId);
+                    
+                    if (mainConfig.type === 'card') {
+                        loadCardPage(pageId, mainConfig);
+                    } else if (mainConfig.type === 'conference') {
+                        loadConferencePage();
+                    }
+                } else if (pageId === 'du-lieu') {
+                    if (loadedData.has(pageId)) return;
+                    const activeSubNav = document.querySelector('.data-sub-nav .sub-nav-btn.active');
+                    if (activeSubNav) {
+                        loadDataForSubPane(activeSubNav.dataset.target);
+                    }
+                    loadPartnersSection(); // Also load partners section
+                    loadedData.add(pageId);
+                }
+            }
+            
+            async function loadCardPage(pageId, config) {
+                 const container = document.getElementById(config.containerId);
+                 if (!container) return;
+                 try {
+                    const dataTable = await fetchDataFromSheet(config.sheetName);
+                    // Sắp xếp bài viết theo ID giảm dần (bài mới nhất lên đầu)
+                    const items = parseSheetData(dataTable).sort((a, b) => Number(b.id) - Number(a.id));
+                    fullContentData[pageId] = items;
+                    renderCards(config.containerId, items, pageId);
+                } catch(e) {
+                    fullContentData[pageId] = [];
+                    if (container) container.innerHTML = `<div class="loader">Lỗi tải dữ liệu: ${e.message}</div>`;
+                }
+            }
+            
+            function loadConferencePage() {
+                const container = document.getElementById('hoi-thao-content');
+                if(!container) return;
+                
+                const introData = {
+                    tieude: "CHUYỂN ĐỔI KÉP: CHUYỂN ĐỔI SỐ - CHUYỂN ĐỔI XANH TẠI KHU CÔNG NGHỆ CAO HƯỚNG ĐẾN MÔ HÌNH NETZERO",
+                    mota: "Khám phá lộ trình hướng đến mô hình Netzero đầu tiên trên cả nước.",
+                    gioithieu: "Hội thảo \"Chuyển đổi kép: Chuyển đổi số - Chuyển đổi xanh\" là diễn đàn quan trọng để các nhà quản lý, chuyên gia, và doanh nghiệp cùng thảo luận về các giải pháp và chiến lược xây dựng mô hình Khu Công nghệ cao bền vững, thông minh và thân thiện với môi trường, hướng tới mục tiêu Netzero.",
+                    tailieu: "https://drive.google.com/drive/folders/1ujaWMTOdPnv63ZISkQHhf3agLjazzKAQ?usp=sharing", 
+                    media: "https://www.youtube.com/embed/sRaCffJndPo",
+                    thoi_gian: "Ngày 13/6/2025 (thứ Sáu)",
+                    dia_diem: "Vườn ươm Doanh nghiệp Công nghệ cao, Khu Công nghệ cao, TP. Thủ Đức"
+                };
+
+                const speakerData = [
+                    { ten: "GS.TS Nguyễn Kỳ Phùng", chucvu: "Trưởng ban Ban Quản lý Khu Công nghệ cao" },
+                    { ten: "PGS.TS Lê Quốc Cường", chucvu: "Phó Trưởng ban Ban Quản lý Khu Công nghệ cao" },
+                    { ten: "PGS.TS Nguyễn Hồng Quân", chucvu: "Viện Trưởng Viện ICED" },
+                    { ten: "GS. Hung Suck Park", chucvu: "Trường Đại học Ulsan" },
+                    { ten: "Bà Trang Nguyễn", chucvu: "Giám đốc Chương trình Climateworks" },
+                ];
+
+                const agendaData = [
+                    { thoigian: "8:00 - 8:30", noidung: "Đón tiếp đại biểu" },
+                    { thoigian: "8:35 – 8:45", noidung: "Phát biểu chào mừng" },
+                    { thoigian: "8:45 – 8:55", noidung: "Báo cáo đề dẫn của BQL Khu CNC về mức độ sẵn sàng chuyển đổi số - xanh" },
+                    { thoigian: "8:55 – 9:15", noidung: "Báo cáo kết quả nghiên cứu Khung tiếp cận Chuyển đổi kép" },
+                    { thoigian: "9:15 – 9:30", noidung: "Tham luận 1: Bài học về mô hình khu công nghiệp Netzero" },
+                    { thoigian: "9:30 – 9:45", noidung: "Tham luận 2: Bài học về chính sách phát triển KCNC Netzero" },
+                    { thoigian: "9:45 – 10:00", noidung: "Giải lao" },
+                    { thoigian: "10:00 – 11:30", noidung: "Phiên thảo luận" },
+                    { thoigian: "11:30 – 11:45", noidung: "Phản hồi, tiếp thu" },
+                    { thoigian: "11:45 – 12:00", noidung: "Phát biểu chỉ đạo và kết luận hội nghị" },
+                ];
+                
+                renderConferencePage(container, introData, speakerData, agendaData);
+                loadDynamicConferenceParts(container);
+            }
+
+            async function loadDynamicConferenceParts(container) {
+                 try {
+                    const [pastEventsTable, galleryTable, sponsorTable] = await Promise.all([
+                        fetchDataFromSheet('HoiThaoDaDienRa'),
+                        fetchDataFromSheet('ThuVienAnh'),
+                        fetchDataFromSheet('DonViDongHanh')
+                    ]);
+
+                    const pastEventsData = parseSheetData(pastEventsTable).sort((a, b) => Number(b.id) - Number(a.id));
+                    const galleryData = parseSheetData(galleryTable);
+                    const sponsorData = parseSheetData(sponsorTable);
+
+                    fullContentData['hoi-thao-da-dien-ra'] = pastEventsData;
+                    
+                    renderDynamicConferenceParts(container, pastEventsData, galleryData, sponsorData);
+
+                } catch (e) {
+                    console.error("Lỗi tải các phần động của trang hội thảo:", e);
+                    const dynamicContainer = document.getElementById('dynamic-conference-sections');
+                    if(dynamicContainer) dynamicContainer.innerHTML = `<div class="loader">${e.message}</div>`;
+                }
+            }
+
+
+            async function loadDataForSubPane(paneId) {
+                const paneKey = paneId.replace('data-', '');
+                if (loadedData.has(paneKey)) return;
+                
+                const config = CONFIG[paneKey];
+                if (!config) return;
+
+                const loaderContainer = document.getElementById(paneId);
+                const loader = loaderContainer?.querySelector('.loader');
+                if (loader) loader.style.display = 'block';
+
+                try {
+                    const dataTable = await fetchDataFromSheet(config.sheetName);
+                    if (config.type === 'chart') {
+                        renderGenericChart(config.canvasId, dataTable);
+                    } else if (config.type === 'table') {
+                        renderTable(config.containerId, dataTable);
+                    }
+                    loadedData.add(paneKey);
+                } catch (e) {
+                    const container = document.getElementById(config.containerId || config.canvasId)?.parentElement;
+                    if(container) container.innerHTML = `<div class="loader">Lỗi tải dữ liệu: ${e.message}</div>`;
+                } finally {
+                    if (loader) loader.style.display = 'none';
+                }
+            }
+            
+            async function loadPartnersSection() {
+                const container = document.getElementById('partners-section');
+                if (!container || loadedData.has('doitac-kh')) return;
+                loadedData.add('doitac-kh');
+                container.innerHTML = `<div class="loader">Đang tải danh sách đối tác...</div>`;
+                try {
+                    const dataTable = await fetchDataFromSheet('DoiTacKH'); 
+                    const items = parseSheetData(dataTable);
+                    renderPartnersCarousel(container, items);
+                } catch(e) {
+                    container.innerHTML = `<div class="loader">Lỗi tải dữ liệu đối tác: ${e.message}</div>`;
+                }
+            }
+
+            // --- UI RENDERING ---
+            function renderCards(containerId, items, category) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                if (items.length === 0) {
+                     container.innerHTML = `<p style="text-align:center;">Chưa có bài viết nào trong mục này.</p>`;
+                     return;
+                }
+                container.innerHTML = items.map(item => `
+                    <article class="card" data-content-id="${item.id}" data-category="${category}">
+                        <img src="${item.imageurl || 'https://placehold.co/400x220/png?text=Image'}" alt="${item.title || ''}" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/400x220/png?text=Lỗi+ảnh';"/>
+                        <div class="card-content">
+                            ${item.date ? `<p class="card-date">${item.date}</p>` : ''}
+                            <h3>${item.title || 'Không có tiêu đề'}</h3>
+                            <p>${item.summary || 'Nhấn để đọc thêm...'}</p>
+                        </div>
+                    </article>
+                `).join('');
+            }
+            
+            function renderConferencePage(container, intro, speakers, agenda) {
+                const speakersHtml = speakers.length > 0 ? speakers.map(speaker => `
+                    <div class="speaker-card">
+                        <img src="${speaker.hinhdaidien || 'https://placehold.co/150x150/png?text=SP'}" alt="${speaker.ten || 'Diễn giả'}" onerror="this.onerror=null;this.src='https://placehold.co/150x150/png?text=Lỗi';">
+                        <div class="speaker-info">
+                            <h4>${speaker.ten || ''}</h4>
+                            <p>${speaker.chucvu || ''}</p>
+                        </div>
+                    </div>
+                `).join('') : '<p>Thông tin đang được cập nhật.</p>';
+
+                const agendaHtml = agenda.length > 0 ? agenda.map(item => `
+                    <tr>
+                        <td>${item.thoigian || ''}</td>
+                        <td>${item.noidung || ''}</td>
+                    </tr>
+                `).join('') : `<tr><td colspan="2">Chương trình chi tiết đang được cập nhật.</td></tr>`;
+
+                container.innerHTML = `
+                    <div class="hero-section">
+                        <div class="container">
+                            <h1>${intro.tieude || 'Hội thảo Khoa học'}</h1>
+                            <p>${intro.mota || 'Thông tin chi tiết về sự kiện sắp tới.'}</p>
+                            <div class="event-status happened">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                                <span>Đã diễn ra</span>
+                            </div>
+                            <div class="event-meta">
+                                <span><strong>Thời gian:</strong> ${intro.thoi_gian}</span>
+                                <span><strong>Địa điểm:</strong> ${intro.dia_diem}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container main-content-grid">
+                        <div class="event-details">
+                            <h2 class="section-title">Thông tin Hội thảo</h2>
+                            <p>${intro.gioithieu || 'Nội dung chi tiết đang được cập nhật.'}</p>
+                            
+                            <h3 style="margin-top: 2rem;">Diễn giả chính</h3>
+                            <div class="speaker-grid">${speakersHtml}</div>
+
+                            <h3 style="margin-top: 2rem;">Chương trình chi tiết</h3>
+                            <table class="agenda-table">
+                                <thead><tr><th>Thời gian</th><th>Nội dung</th></tr></thead>
+                                <tbody>${agendaHtml}</tbody>
+                            </table>
+                            
+                            ${intro.media ? `
+                            <div class="video-section">
+                                <h3 style="margin-top: 2rem;">Video Hội thảo</h3>
+                                <div class="media-container">
+                                    <iframe src="${intro.media.replace("watch?v=", "embed/")}" title="Video hội thảo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            </div>` : ''}
+                        </div>
+                        <div class="registration-sidebar">
+                            <h2 class="section-title">Đăng ký tham dự</h2>
+                            <form id="registration-form">
+                                <div class="form-group"><label for="conf-name">Họ và tên</label><input type="text" id="conf-name" name="name" required></div>
+                                <div class="form-group"><label for="conf-email">Email</label><input type="email" id="conf-email" name="email" required></div>
+                                <div class="form-group"><label for="conf-org">Đơn vị/Tổ chức</label><input type="text" id="conf-org" name="organization"></div>
+                                <button type="submit" class="submit-btn">Gửi đăng ký</button>
+                            </form>
+                            
+                            ${intro.tailieu ? `
+                            <div class="document-section">
+                                 <h3 class="section-title" style="font-size: 1.5rem; border-color: var(--accent-color);">Tài liệu Hội thảo</h3>
+                                 <p>Quét mã QR hoặc nhấn vào link bên dưới để truy cập tài liệu.</p>
+                                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(intro.tailieu)}" alt="Mã QR cho tài liệu hội thảo">
+                                 <a href="${intro.tailieu}" target="_blank">Truy cập thư mục tài liệu</a>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                    <div id="dynamic-conference-sections">
+                        <div class="loader">Đang tải các mục khác...</div>
+                    </div>
+                `;
+            }
+            
+            function renderDynamicConferenceParts(container, pastEvents, gallery, sponsors) {
+                const dynamicContainer = document.getElementById('dynamic-conference-sections');
+                if(!dynamicContainer) return;
+
+                const pastEventsHtml = pastEvents.length > 0 ? pastEvents.map(item => `
+                    <article class="card" data-content-id="${item.id}" data-category="hoi-thao-da-dien-ra">
+                        <img src="${item.imageurl || 'https://placehold.co/400x220/png?text=Image'}" alt="${item.title || ''}" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/400x220/png?text=Lỗi+ảnh';"/>
+                        <div class="card-content">
+                            ${item.date ? `<p class="card-date">${item.date}</p>` : ''}
+                            <h3>${item.title || 'Không có tiêu đề'}</h3>
+                            <p>${item.summary || 'Nhấn để đọc thêm...'}</p>
+                        </div>
+                    </article>
+                `).join('') : '<p>Chưa có hội thảo cũ nào.</p>';
+
+                const galleryHtml = gallery.length > 0 ? gallery.map(item => `
+                    <img src="${item.imageurl}" alt="${item.description || 'Ảnh sự kiện'}" onerror="this.onerror=null;this.src='https://placehold.co/300x250/png?text=Lỗi+ảnh';">
+                `).join('') : '<p>Chưa có hình ảnh nào.</p>';
+
+                const sponsorsHtml = sponsors.length > 0 ? sponsors.map(item => `
+                    <img src="${item.logourl}" alt="${item.companyname || 'Logo đối tác'}" onerror="this.onerror=null;this.src='https://placehold.co/200x100/png?text=Lỗi';">
+                `).join('') : '';
+
+                dynamicContainer.innerHTML = `
+                    <div class="container" style="margin-top: 4rem; background: var(--white-color); padding: 2rem; border-radius: 12px; box-shadow: 0 5px 15px var(--shadow-color);">
+                        <h2 class="centered-title">Thư viện ảnh</h2>
+                        <div class="gallery-grid">${galleryHtml}</div>
+                    </div>
+
+                    ${sponsors.length > 0 ? `
+                    <div style="padding: 3rem 0; margin-top: 4rem;">
+                        <div class="container">
+                             <h2 class="centered-title">Đơn vị đồng hành</h2>
+                             <div class="logo-carousel grayscale">
+                                <div class="logo-slide">${sponsorsHtml}${sponsorsHtml}</div>
+                             </div>
+                        </div>
+                    </div>` : ''}
+
+                    <div class="container" style="margin-top: 4rem; background: var(--white-color); padding: 2rem; border-radius: 12px; box-shadow: 0 5px 15px var(--shadow-color);">
+                        <h2 class="centered-title">Hội thảo đã diễn ra</h2>
+                        <div class="card-grid">${pastEventsHtml}</div>
+                    </div>
+                `;
+            }
+
+            function renderPartnersCarousel(container, partners) {
+                if (!container) return;
+                const partnersHtml = partners.length > 0 ? partners.map(item => `
+                    <img src="${item.logourl}" alt="${item.ten || 'Logo đối tác'}" onerror="this.onerror=null;this.src='https://placehold.co/200x100/png?text=Lỗi';">
+                `).join('') : '';
+
+                container.innerHTML = `
+                    <div style="padding: 3rem 0; margin-top: 4rem; background-color: var(--white-color);">
+                        <div class="container">
+                             <h2 class="centered-title">Đối tác KH&CN, ĐMST</h2>
+                             <div class="logo-carousel">
+                                <div class="logo-slide">${partnersHtml}${partnersHtml}</div>
+                             </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+
+            function renderGenericChart(canvasId, tableData) {
+                const container = document.getElementById(canvasId)?.parentElement;
+                if(!container) return;
+                const loader = container.querySelector('.loader');
+                if(loader) loader.style.display = 'none';
+
+                if (!tableData || tableData.rows.length === 0) return;
+                if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+                const labels = tableData.rows.map(row => row.c[0]?.v || '');
+                const datasets = tableData.cols.slice(1).map((col, i) => ({
+                    label: col.label,
+                    data: tableData.rows.map(row => row.c[i + 1]?.v || 0),
+                    backgroundColor: `rgba(${[52,230,46,155,241][i%5]}, ${[152,126,204,89,196][i%5]}, ${[219,34,113,182,15][i%5]}, 0.6)`,
+                    borderColor: `rgba(${[52,230,46,155,241][i%5]}, ${[152,126,204,89,196][i%5]}, ${[219,34,113,182,15][i%5]}, 1)`,
+                    borderWidth: 1,
+                    type: (col.label.toLowerCase().includes('%') || col.label.toLowerCase().includes('tỷ')) ? 'line' : 'bar',
+                    yAxisID: (col.label.toLowerCase().includes('%') || col.label.toLowerCase().includes('tỷ')) ? 'y1' : 'y'
+                }));
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                chartInstances[canvasId] = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels, datasets },
+                    options: { responsive: true, maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true }, y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false } } }
+                    }
+                });
+            }
+
+            function renderTable(containerId, tableData) {
+                const container = document.getElementById(containerId);
+                if (!container || !tableData || tableData.rows.length === 0) return;
+                const headers = tableData.cols.map(col => `<th>${col.label}</th>`).join('');
+                const body = tableData.rows.map(row => `<tr>${(row.c || []).map(cell => `<td>${cell?.f || cell?.v || ''}</td>`).join('')}</tr>`).join('');
+                container.innerHTML = `
+                    <div class="filter-container"><input type="text" class="table-filter-input" placeholder="Lọc theo từ khóa..."></div>
+                    <div class="data-table-wrapper"><table class="data-table"><thead><tr>${headers}</tr></thead><tbody>${body}</tbody></table></div>
+                `;
+                container.querySelector('.table-filter-input').addEventListener('keyup', (e) => {
+                    const filterText = e.target.value.toLowerCase();
+                    container.querySelectorAll('tbody tr').forEach(row => {
+                        row.style.display = row.textContent.toLowerCase().includes(filterText) ? '' : 'none';
+                    });
+                });
+            }
+
+            // --- NAVIGATION & EVENT LISTENERS ---
+            function showPage(pageId) {
+                document.querySelectorAll('main > section').forEach(s => s.classList.remove('active'));
+                document.getElementById(pageId)?.classList.add('active');
+
+                document.querySelectorAll('.main-nav a, .site-logo').forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${pageId}`);
+                });
+
+                if (window.scrollY > 150) window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                loadContentForPage(pageId);
+            }
+            
+             function animateCountUp(el) {
+                const originalText = el.textContent;
+                const target = parseInt(originalText.replace(/\D/g, ''));
+                if (isNaN(target)) return;
+                el.textContent = '0';
+                let start = 0;
+                const duration = 2000;
+                const step = (timestamp) => {
+                    if (!start) start = timestamp;
+                    const progress = timestamp - start;
+                    const current = Math.min(Math.floor(progress / duration * target), target);
+                    el.textContent = current;
+                    if (current < target) {
+                        window.requestAnimationFrame(step);
+                    } else {
+                        el.textContent = originalText;
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const statNumbers = entry.target.querySelectorAll('.stat-number');
+                        statNumbers.forEach(num => animateCountUp(num));
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                observer.observe(statsSection);
+            }
+
+
+            document.querySelectorAll('.main-nav a, .site-logo').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(e.currentTarget.getAttribute('href').substring(1));
+                });
+            });
+
+            document.body.addEventListener('click', function(event) {
+                const card = event.target.closest('.card[data-content-id]');
+                if (!card) return;
+                
+                const { contentId, category } = card.dataset;
+                if (!contentId || !category) return;
+                
+                const dataList = fullContentData[category];
+                if (!dataList) {
+                    console.error("Không tìm thấy danh sách dữ liệu cho category:", category);
+                    return;
+                }
+                
+                const article = dataList.find(item => String(item.id).trim() === String(contentId).trim());
+                
+                if (article) {
+                    document.getElementById('article-modal-title').innerText = article.title || "Không có tiêu đề";
+                    document.getElementById('article-modal-body').innerHTML = article.fullcontenthtml || `<p>${article.summary || "Nội dung chi tiết không có sẵn."}</p>`;
+                    document.getElementById('article-modal-overlay').classList.add('show');
+                } else {
+                    console.error(`Không tìm thấy bài viết với ID: ${contentId} trong category: ${category}`);
+                }
+            });
+            
+            document.getElementById('article-modal-close-btn').addEventListener('click', () => {
+                document.getElementById('article-modal-overlay').classList.remove('show');
+            });
+            
+            document.querySelectorAll('.data-sub-nav .sub-nav-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.data-sub-nav .sub-nav-btn').forEach(btn => btn.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    const targetPaneId = e.currentTarget.dataset.target;
+                    document.querySelectorAll('.data-content-pane').forEach(pane => {
+                        pane.classList.toggle('active', pane.id === targetPaneId);
+                    });
+                    loadDataForSubPane(targetPaneId);
+                });
+            });
+
+            // --- INITIALIZATION ---
+            showPage('trang-chu');
+        });
+    </script>
+</body>
+</html>
