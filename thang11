@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic Báo Cáo KCNC Tháng 11/2025 - Final V13</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .infographic-wrapper {
+            width: 800px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        }
+        .header-pattern {
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1) 0px,
+                rgba(255, 255, 255, 0.1) 2px,
+                transparent 2px,
+                transparent 12px
+            );
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+        }
+        .section-number {
+            background: #1e3a8a;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1e40af;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        .icon-lg {
+            font-size: 3.5rem;
+            line-height: 1;
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .stat-box {
+            transition: all 0.3s ease;
+        }
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .big-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        @media print {
+            body { background: white; }
+            .no-print { display: none !important; }
+            .infographic-wrapper { box-shadow: none; margin: 0; width: 100%; }
+            -webkit-print-color-adjust: exact;
+        }
+    </style>
+</head>
+<body class="py-8 bg-gray-100">
+
+    <!-- Control Buttons -->
+    <div class="fixed top-6 right-6 z-50 no-print flex flex-col gap-3">
+        <button onclick="downloadDirectPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full shadow-xl transition flex items-center justify-center transform hover:scale-105 border-2 border-white">
+            <i class="fas fa-file-pdf mr-2"></i>Tải PDF Ngay
+        </button>
+        <button onclick="downloadImage()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-xl transition flex items-center justify-center transform hover:scale-105 border-2 border-white">
+            <i class="fas fa-image mr-2"></i>Tải Ảnh (PNG)
+        </button>
+    </div>
+
+    <div class="infographic-wrapper" id="capture-area">
+        
+        <!-- HEADER -->
+        <header class="header-bg text-white p-10 text-center relative overflow-hidden">
+            <div class="absolute inset-0 header-pattern"></div>
+            
+            <!-- LOGO SHTP (FIXED) -->
+            <div class="absolute top-6 left-6 z-20 bg-white p-2 rounded-lg shadow-md flex items-center justify-center" style="width: auto; height: auto;">
+                <!-- Sử dụng crossorigin và style inline để fix lỗi render -->
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Saigon_Hi-Tech_Park.svg/512px-Saigon_Hi-Tech_Park.svg.png" 
+                     alt="Logo SHTP" 
+                     crossorigin="anonymous"
+                     style="height: 50px; width: auto; display: block;"
+                     onerror="this.src='https://placehold.co/150x80?text=LOGO+SHTP'; this.onerror=null;">
+            </div>
+
+            <div class="relative z-10 pt-4">
+                <div class="inline-block bg-white/20 backdrop-blur-sm border border-white/30 px-5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+                    Ban Quản lý Khu Công nghệ cao TP. Hồ Chí Minh
+                </div>
+                <h1 class="text-4xl font-black mb-2 uppercase leading-tight drop-shadow-sm">Báo Cáo Kết Quả Thực Hiện<br>Nghị Quyết Số 57-NQ/TW</h1>
+                <div class="w-24 h-2 bg-yellow-400 mx-auto my-5 rounded-full"></div>
+                <div class="flex justify-center items-center gap-2 text-blue-100 font-bold text-xl">
+                    <i class="far fa-calendar-alt"></i> Tháng 11 Năm 2025
+                </div>
+            </div>
+        </header>
+
+        <div class="p-10 space-y-10 bg-white bg-pattern">
+
+            <!-- 1. NHẬN THỨC & SỰ KIỆN -->
+            <section>
+                <div class="section-header">
+                    <div class="section-number bg-blue-600">1</div>
+                    <h2 class="section-title text-blue-800">Tuyên truyền nâng Cao Nhận Thức</h2>
+                </div>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 text-center stat-box flex flex-col justify-between">
+                        <div>
+                            <i class="fas fa-bullhorn text-blue-500 mb-3 icon-lg block"></i>
+                            <div class="text-3xl font-black text-gray-800">20+</div>
+                            <div class="text-sm text-gray-600 font-bold uppercase mt-1">Tin bài tuyên truyền</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 text-center stat-box flex flex-col justify-between">
+                        <div>
+                            <i class="fas fa-calendar-days text-blue-500 mb-3 icon-lg block"></i>
+                            <div class="text-3xl font-black text-gray-800">05</div>
+                            <div class="text-sm text-gray-600 font-bold uppercase mt-1">Sự kiện tổ chức</div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-blue-200 text-[11px] text-gray-500 font-medium leading-tight italic">
+                            Hội thảo, toạ đàm, chương trình trải nghiệm công nghệ
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 text-center stat-box flex flex-col justify-between">
+                        <div>
+                            <i class="fas fa-users-viewfinder text-blue-500 mb-3 icon-lg block"></i>
+                            <div class="text-3xl font-black text-gray-800">49</div>
+                            <div class="text-sm text-gray-600 font-bold uppercase mt-1">Đội thi Smart City</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. THỂ CHẾ & CHÍNH SÁCH -->
+            <section>
+                <div class="section-header">
+                    <div class="section-number bg-slate-700">2</div>
+                    <h2 class="section-title text-slate-800">Hoàn Thiện Thể Chế</h2>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-6">
+                    <div class="text-slate-600 pt-2 pl-2">
+                         <i class="fas fa-file-signature icon-lg"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 text-lg mb-3 uppercase border-b border-slate-200 pb-2">Đã góp ý 04 Văn bản quan trọng:</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start text-sm text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3 text-lg"></i>
+                                <span>Danh mục sản phẩm, dịch vụ <strong>công nghệ số quốc gia</strong>.</span>
+                            </li>
+                            <li class="flex items-start text-sm text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3 text-lg"></i>
+                                <span>Quy định <strong>thu hút chuyên gia, nhà khoa học</strong>.</span>
+                            </li>
+                            <li class="flex items-start text-sm text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3 text-lg"></i>
+                                <span>Kế hoạch lộ trình <strong>đổi mới công nghệ</strong> đến 2035.</span>
+                            </li>
+                            <li class="flex items-start text-sm text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3 text-lg"></i>
+                                <span>Kế hoạch thi hành Luật <strong>Tiêu chuẩn & Quy chuẩn</strong>.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. HẠ TẦNG -->
+            <section>
+                <div class="section-header">
+                    <div class="section-number bg-orange-600">3</div>
+                    <h2 class="section-title text-orange-700">Hạ Tầng & Đề Án Trọng Điểm</h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-white border-l-8 border-orange-500 p-5 shadow-sm rounded-r-xl flex items-center gap-5">
+                        <div class="text-orange-500 min-w-[60px] text-center">
+                             <i class="fas fa-map-marked-alt icon-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800 uppercase">Đề án mở rộng Khu Công nghệ cao</h3>
+                            <p class="text-sm text-gray-600 mt-1">
+                                <span class="inline-block bg-orange-100 text-orange-800 px-2 py-1 rounded font-bold text-xs mr-2">TRÌNH THỦ TƯỚNG (22/11)</span>
+                                Bổ sung chức năng Khu Công viên Khoa học & Công nghệ.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-orange-50 p-4 rounded-xl border border-orange-200">
+                            <i class="fas fa-university text-orange-400 text-3xl mb-2 block"></i>
+                            <h4 class="font-bold text-gray-800 text-sm uppercase">Đang hoàn thiện</h4>
+                            <ul class="text-xs text-gray-600 mt-2 list-disc list-inside space-y-1">
+                                <li>Nâng cấp <strong>Trung tâm Đào tạo</strong> đạt chuẩn quốc tế.</li>
+                                <li>Nâng cấp Vườn ươm thành <strong>Trung tâm Đổi mới sáng tạo</strong>.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+                            <i class="fas fa-leaf text-green-500 text-3xl mb-2 block"></i>
+                            <h4 class="font-bold text-gray-800 text-sm uppercase">Đang triển khai</h4>
+                            <p class="text-xs text-gray-600 mt-2">
+                                Xây dựng Trung tâm Nghiên cứu chuẩn quốc tế <strong>(CoE) về Chuyển đổi số - Chuyển đổi xanh</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. NHÂN LỰC -->
+            <section>
+                <div class="section-header">
+                    <div class="section-number bg-green-600">4</div>
+                    <h2 class="section-title text-green-700">Đào Tạo Nguồn Nhân Lực</h2>
+                </div>
+                <div class="bg-gradient-to-r from-green-50 to-white p-6 rounded-2xl border border-green-100 flex items-center gap-8 shadow-sm">
+                    <div class="text-center">
+                        <div class="bg-green-600 text-white w-32 h-32 rounded-full flex flex-col items-center justify-center shadow-lg mx-auto">
+                            <span class="text-4xl font-black">245</span>
+                            <span class="text-xs font-bold uppercase mt-1">Học viên</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-x-8 gap-y-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-microchip text-3xl text-green-600 mt-1"></i>
+                            <div>
+                                <strong class="block text-gray-800 text-lg">93</strong>
+                                <span class="text-xs text-gray-500 uppercase font-bold">AI For Leaders</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-pen-nib text-3xl text-green-600 mt-1"></i>
+                            <div>
+                                <strong class="block text-gray-800 text-lg">89</strong>
+                                <span class="text-xs text-gray-500 uppercase font-bold">Sinh viên (SHTT)</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-cogs text-3xl text-green-600 mt-1"></i>
+                            <div>
+                                <strong class="block text-gray-800 text-lg">36</strong>
+                                <span class="text-xs text-gray-500 uppercase font-bold">Kỹ thuật lập trình tự động hoá</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-chalkboard-teacher text-3xl text-green-600 mt-1"></i>
+                            <div>
+                                <strong class="block text-gray-800 text-lg">27</strong>
+                                <span class="text-xs text-gray-500 uppercase font-bold">Giảng viên (Cơ khí)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. CHUYỂN ĐỔI SỐ -->
+            <section>
+                <div class="section-header">
+                    <div class="section-number bg-purple-600">5</div>
+                    <h2 class="section-title text-purple-700">Chuyển Đổi Số</h2>
+                </div>
+                <div class="bg-purple-50 rounded-xl p-6 border border-purple-100 flex justify-between items-center stat-box">
+                    <div class="flex items-center gap-5">
+                        <div class="bg-purple-200 p-4 rounded-full text-purple-600">
+                            <i class="fas fa-laptop-code text-4xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg uppercase">Dịch vụ công trực tuyến</h3>
+                            <p class="text-sm text-gray-600">Lĩnh vực thành lập & hoạt động doanh nghiệp</p>
+                        </div>
+                    </div>
+                    <div class="text-right flex flex-col items-end">
+                        <span class="big-number text-purple-700 leading-none mb-2">43</span>
+                        <span class="inline-block text-xs font-bold text-purple-500 uppercase bg-white px-2 py-1 rounded shadow-sm whitespace-nowrap">Thủ tục toàn trình</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. NGHIÊN CỨU KHOA HỌC & KHỞI NGHIỆP -->
+            <section>
+                <div class="section-header">
+                    <div class="section-number bg-teal-600">6</div>
+                    <h2 class="section-title text-teal-700">Nghiên Cứu Khoa Học & Đổi mới sáng tạo</h2>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <!-- Block: Nghiên cứu Khoa học (R&D) -->
+                    <div class="bg-teal-50 rounded-2xl p-5 border border-teal-200 relative overflow-hidden stat-box">
+                        <div class="absolute -right-4 -top-4 opacity-10">
+                            <i class="fas fa-flask text-9xl text-teal-600"></i>
+                        </div>
+                        <h3 class="font-bold text-teal-800 uppercase mb-4 flex items-center">
+                            <i class="fas fa-microscope mr-2 text-xl"></i>Hoạt động Nghiên cứu (R&D)
+                        </h3>
+                        <div class="space-y-4 relative z-10">
+                            <div class="flex justify-between items-end border-b border-teal-200 pb-2">
+                                <span class="text-sm font-semibold text-gray-600">Nhiệm vụ nghiệm thu</span>
+                                <span class="big-number text-teal-600">06</span>
+                            </div>
+                            <div class="flex justify-between items-end border-b border-teal-200 pb-2">
+                                <span class="text-sm font-semibold text-gray-600">Công bố khoa học</span>
+                                <span class="big-number text-teal-600">31</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <span class="text-sm font-semibold text-gray-600">Thương mại hoá</span>
+                                <div class="text-right flex flex-col items-end">
+                                    <span class="big-number text-teal-600 leading-none mb-1">19</span>
+                                    <span class="text-xs font-bold text-teal-500 uppercase block">Hợp đồng</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block: Hệ sinh thái Khởi nghiệp -->
+                    <div class="bg-indigo-50 rounded-2xl p-5 border border-indigo-200 relative overflow-hidden stat-box">
+                         <div class="absolute -right-4 -top-4 opacity-10">
+                            <i class="fas fa-rocket text-9xl text-indigo-600"></i>
+                        </div>
+                        <h3 class="font-bold text-indigo-800 uppercase mb-4 flex items-center">
+                            <i class="fas fa-seedling mr-2 text-xl"></i>Ươm tạo Doanh nghiệp
+                        </h3>
+                        
+                        <div class="grid grid-cols-3 gap-2 mb-4 relative z-10">
+                            <div class="bg-white p-2 rounded-xl shadow-sm text-center">
+                                <i class="fas fa-folder-plus text-indigo-400 mb-1 block"></i>
+                                <span class="block text-2xl font-black text-indigo-700">03</span>
+                                <span class="text-[9px] font-bold text-gray-500 uppercase">Dự án mới</span>
+                            </div>
+                            <div class="bg-white p-2 rounded-xl shadow-sm text-center">
+                                <i class="fas fa-microchip text-indigo-400 mb-1 block"></i>
+                                <span class="block text-2xl font-black text-indigo-700">13</span>
+                                <span class="text-[9px] font-bold text-gray-500 uppercase">Dự án vi mạch</span>
+                            </div>
+                            <div class="bg-white p-2 rounded-xl shadow-sm text-center">
+                                <i class="fas fa-brain text-indigo-400 mb-1 block"></i>
+                                <span class="block text-2xl font-black text-indigo-700">06</span>
+                                <span class="text-[9px] font-bold text-gray-500 uppercase">Dự án AI</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/60 p-3 rounded-lg text-xs text-gray-700 relative z-10">
+                            <strong><i class="fas fa-hand-holding-dollar text-indigo-500 mr-1"></i>Kết nối thương mại hóa:</strong>
+                            Infalway, Tip To Ma Lai, Casso, Checkee...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. HỢP TÁC QUỐC TẾ -->
+            <section>
+                <div class="section-header">
+                    <div class="section-number bg-pink-600">7</div>
+                    <h2 class="section-title text-pink-700">Hợp Tác Quốc Tế</h2>
+                </div>
+                <div class="bg-gradient-to-br from-pink-50 to-white rounded-2xl p-6 border border-pink-200 stat-box">
+                    <div class="flex gap-6">
+                        <div class="w-1/3 text-center border-r border-pink-200 pr-6 flex flex-col justify-center">
+                            <i class="fas fa-globe-asia text-pink-500 icon-lg mb-4 block"></i>
+                            <h3 class="font-bold text-pink-800 uppercase text-lg">Kết Nối Toàn Cầu</h3>
+                        </div>
+                        <div class="w-2/3 grid grid-cols-2 gap-4">
+                            <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-pink-400">
+                                <h4 class="font-bold text-gray-800 text-xs uppercase mb-1">Mạng lưới</h4>
+                                <p class="text-sm font-bold text-pink-600">ASPA, IASP, SEMI</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-pink-400">
+                                <h4 class="font-bold text-gray-800 text-xs uppercase mb-1">Đối tác</h4>
+                                <p class="text-sm font-bold text-pink-600">VASE (Úc) và VANJ (Nhật Bản), Đại học West London, New  (Anh), Philippines, IAEA,... </p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-pink-400 col-span-2">
+                                <h4 class="font-bold text-gray-800 text-xs uppercase mb-1">Sự kiện nổi bật</h4>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-bold text-gray-700"><i class="fas fa-calendar-check text-pink-400 mr-1"></i>SemiExpo Vietnam 2025</span>
+                                    <span class="text-sm font-bold text-gray-700"><i class="fas fa-calendar-check text-pink-400 mr-1"></i>GRECO 2025: 35 sản phẩm CNC</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="bg-gray-800 text-white p-6 text-center">
+            <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Mô hình chiến lược</h3>
+            <div class="flex justify-center gap-4 text-sm font-semibold">
+                <span class="bg-gray-700 px-4 py-2 rounded-full flex items-center shadow-lg"><i class="fas fa-cube text-blue-400 mr-2"></i>Mô hình 3 Nhà+</span>
+                <span class="bg-gray-700 px-4 py-2 rounded-full flex items-center shadow-lg"><i class="fas fa-sync text-green-400 mr-2"></i>Chuyển đổi Kép (Số - Xanh)</span>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-4 border-t border-gray-700 pt-2">
+                Nguồn: Báo cáo số 1981/KCNC-QLKHCN&HTQT - Ban Quản lý Khu Công nghệ cao TP.HCM
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        function downloadImage() {
+            const captureArea = document.getElementById('capture-area');
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Đang xử lý...';
+            btn.disabled = true;
+
+            html2canvas(captureArea, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                logging: false,
+                onclone: (clonedDoc) => {
+                    clonedDoc.getElementById('capture-area').style.display = 'block';
+                }
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Infographic_KCNC_Thang11_Final_V13.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error("Lỗi khi tạo ảnh:", err);
+                alert("Không thể tạo ảnh tự động. Vui lòng sử dụng nút 'Tải PDF Ngay' bên cạnh để lưu lại báo cáo.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        function downloadDirectPDF() {
+            const element = document.getElementById('capture-area');
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Đang xử lý...';
+            btn.disabled = true;
+
+            const opt = {
+                margin:       0,
+                filename:     'Infographic_KCNC_Thang11_Final.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: 'avoid-all' } 
+            };
+            
+            // Tự động tính toán kích thước thật để in PDF dài (nếu cần)
+            // Hoặc ép về khổ A4
+            const width = element.offsetWidth;
+            const height = element.offsetHeight;
+            const widthIn = width / 96;
+            const heightIn = height / 96;
+
+            // Sử dụng khổ giấy tùy biến theo nội dung để không bị cắt
+            opt.jsPDF.format = [widthIn, heightIn];
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error(err);
+                alert("Lỗi khi tạo PDF. Vui lòng thử lại hoặc dùng trình duyệt khác.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+    </script>
+
+</body>
+</html>
